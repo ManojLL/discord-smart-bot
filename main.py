@@ -3,6 +3,10 @@ import random
 import time
 import json
 
+import phraseGenerator 
+
+phraseGenerator.jsonGen()
+
 print(f'Screen - {pg.size()}')
 print(f'Mouse  - {pg.position()}')
 
