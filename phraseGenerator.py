@@ -5,9 +5,12 @@ arr = ["keep going forward", "this is gonna be a hit", "LFG", "lets make this pr
 "we can do this", "server is mad rn!", "you guys rock!", "we can hit the moon", "mooooon", "gooooooooo ppl we can do this", "server is live af", "love this server", "the hype is real",
 "lets go fam!", "who love these sneak peaks", "this is an awesome project for sure", "just keep grinding", "this is gonna be a hella community", "imagine if you can hold a NFT helment, damn!", 
 "that's nice tho", "i really Like that idea", "keep going, you can do this my friend", "hey newbie, wassup?", "i am not tired", "tired means weak lol", "this is crazy af", "ppl are going mad",
-"y'll work so hard to get into the WL", "so much energy", "right on time!", "need this so bad"]
+"y'll work so hard to get into the WL", "so much energy", "right on time!", "need this so bad", "this community is the best", "yessir!", "maybe WL can be a life changing for us", "keep up guys!",
+"never seen something like this before", "unique stuff", "wdym?", "keep going!", "like i said before, no pain - no gain", "don't give up", "try hard mode - ON", "that's great man!", "legit stuff",
+"sweet!"]
 
 with open('random_phrase.json', 'w') as fp:
     json.dump(arr, fp)
 
-print('JSON file created')    
+print(f'Length of Random Phases Arr - {len(arr)}')
+print('***** JSON file created *****')    
