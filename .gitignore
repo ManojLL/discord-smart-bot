@@ -10,7 +10,8 @@
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -186,6 +187,9 @@ cython_debug/
 # Ignore all local history of files
 .history
 .ionide
+
+# Ignore all local history of files
+login/logindetails.dat
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,macos,python
 
