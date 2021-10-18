@@ -63,8 +63,6 @@ def spam(n, data):
     with ChargingBar('\nSending Messages', max=n) as bar:
         bar.suffix = '%(percent).1f%% [ %(index)d / %(max)d ]'
         for i in range(n):
-            random.shuffle(data)
-            random.shuffle(timeArr)
             actions = ActionChains(driver)
             actions.send_keys(random.choice(data))
             actions.send_keys(Keys.ENTER)
