@@ -3,7 +3,7 @@ from chatterbot.trainers import ChatterBotCorpusTrainer
 import spacy
 
 # Load English tokenizer, tagger, parser, NER and word vectors
-spacy.load('en_core_web_sm')
+spacy.load('en')
 
 def train_bot():
     # Create a new chat bot named Discord-ChatBot
@@ -23,12 +23,9 @@ def train_bot():
     # Train based on the english conversations corpus
     trainer.train("chatterbot.corpus.english.conversations")
 
-    print("\nTraining completed\n")
+    print("\nTraining completed")
     
     return chatbot
-
-if __name__ == '__main__':
-  train_bot()
 
 # message = ""
 # while message.lower() not in ("q", "quit", "exit"):

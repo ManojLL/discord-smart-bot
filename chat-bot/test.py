@@ -55,52 +55,22 @@ def login(link, email, passwd):
         driver.find_element_by_name('password').send_keys(Keys.RETURN)
         sleep(5)
         print("\nLogged in successfully")
-        flag = True
-    sleep(1)
-    clearscreen()
-
-# Create spam logs
-def create_logs(logs):
-    localtime = time.localtime()
-    timeStamp = time.strftime('%Y-%m-%d %H:%M:%S', localtime)
-    
-    with open(f'logs/{timeStamp}.txt', 'w') as file:
-        for log in logs:
-            file.write(log)
-
-# Starting spam
-def chat(n, intervals, chatbot):
-    logs = []
-    thread = driver.find_elements_by_class_name('messageContent-2qWWxC')
-    nextMsg = len(thread)
-    
-    system('cls' if osname == 'nt' else 'clear')
-    with alive_bar(n, title='Sending Messages', bar='classic2', spinner='classic') as bar:
-        for i in range(n):
-            localtime = time.localtime()
-            timeStamp = time.strftime('%Y-%m-%d %H:%M:%S', localtime)
-            
-            # randomWrd = random.choice(messages)
-            randomTime = random.choice(intervals)
-            actions.send_keys(chatbot.get_response("hi, how are you?", Keys.ENTER))
-            
-            actions = ActionChains(driver)
-            while True:
-                thread = driver.find_elements_by_class_name('messageContent-2qWWxC')
-                try:
-                    while not thread[nextMsg] == None:
-                        break
+        
+        messages = driver.find_element_by_class_name('slateTextArea-1Mkdgw').send_keys("test msg", Keys.ENTER)
+        posts = driver.find_elements_by_class_name('messageContent-2qWWxC')
+        nextMsg = len(posts)
+        
+        while True:
+            posts = driver.find_elements_by_class_name('messageContent-2qWWxC')
+            try:
+                while not posts[nextMsg] == None:
                     break
-                except Exception as e:
-                    print(e)
-                    pass
-            actions.send_keys(chatbot.get_response(thread[nextMsg].text))
-            actions.send_keys(Keys.ENTER)
-            actions.perform()
-            
-            logs.append(f'{str(i).zfill(3)} - {randomTime}s - {timeStamp} - {"randomWrd"}')
-    print("\nAll Messages Sent")
-    # create_logs(logs)
+                break
+            except Exception as e:
+                pass
+        response = posts[nextMsg].text
+        driver.find_element_by_class_name('slateTextArea-1Mkdgw').send_keys(response, Keys.ENTER)
+    sleep(1)
 
 # Menu
 def main():
@@ -110,7 +80,6 @@ def main():
     time_interval = ""
 
     details = retrieve_credentials()
-    chatbot = train_bot()
     
     if (details != None):
         email, passwd = details
@@ -120,23 +89,10 @@ def main():
 
     try:
         while True:
-            clearscreen()
             link = input("\nEnter link to channel: ")
-            num_of_msg = int(input("Enter number of messages: "))
-
-            while True:
-                time_interval = input("Enter time interval between messages (in seconds): ")
-                if (time_interval == "q"):
-                    break
-                intervals.append(int(time_interval))
-
             login(link, email, passwd)
-            chat(num_of_msg, intervals, chatbot)
-            choice = input("\nDo you want to send more messages (y/n): ")
-            if (choice == "n" or choice == "q"):
-                break
     except Exception as e:
-        print("\nInvalid input, Enter 'q' to exit")
+        print(e)
 
 if __name__ == '__main__':
     driver = ''
