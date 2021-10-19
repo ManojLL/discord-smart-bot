@@ -12,7 +12,7 @@ from login import credentials
 from pickle import load
 from time import sleep
 import random
-import json
+import time
 
 
 def retrieve_credentials():
@@ -57,21 +57,40 @@ def retrieve_messages():
     with open('messages/messages.txt') as file:
         data = file.readlines()
         data = [line.rstrip() for line in data]
+    print(f'\n******* Text File loaded with {len(data)} messages *******\n')  
     return data
 
+# Create spam logs
+def create_logs(logs):
+    localtime = time.localtime()
+    timeStamp = time.strftime('%Y-%m-%d %H:%M:%S', localtime)
+    
+    with open(f'logs/{timeStamp}.txt', 'w') as file:
+        for log in logs:
+            file.write(log)
+
 # Starting spam
-def spam(n, data):
-    timeArr = [3, 4, 5]
+def spam(n, messages, intervals):
+    logs = []
     system('cls' if osname == 'nt' else 'clear')
     with alive_bar(n, title='Sending Messages', bar='classic2', spinner='classic') as bar:
         for i in range(n):
+            localtime = time.localtime()
+            timeStamp = time.strftime('%Y-%m-%d %H:%M:%S', localtime)
+            
+            randomWrd = random.choice(messages)
+            randomTime = random.choice(intervals)
+            
             actions = ActionChains(driver)
-            actions.send_keys(random.choice(data))
+            actions.send_keys(randomWrd)
             actions.send_keys(Keys.ENTER)
             actions.perform()
             bar()
-            sleep(random.choice(timeArr))
+            sleep(randomTime)
+            
+            logs.append(f'{str(i).zfill(3)} - {randomTime}s - {timeStamp} - {randomWrd}')
     print("\nAll Messages Sent")
+    create_logs(logs)
 
 # Menu
 def main():
@@ -81,7 +100,8 @@ def main():
     time_interval = ""
 
     details = retrieve_credentials()
-    data = retrieve_messages()
+    messages = retrieve_messages()
+    
     if (details != None):
         email, passwd = details
     else:
@@ -101,7 +121,7 @@ def main():
                 intervals.append(int(time_interval))
 
             login(link, email, passwd)
-            spam(num_of_msg, data)
+            spam(num_of_msg, messages, intervals)
             choice = input("\nDo you want to send more messages (y/n): ")
             if (choice == "n" or choice == "q"):
                 break

@@ -18,5 +18,4 @@ def messagesGen():
         print(err)
         
 if __name__ == '__main__':
-  messagesGen
-()
+  messagesGen()
