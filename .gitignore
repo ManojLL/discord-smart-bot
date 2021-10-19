@@ -188,8 +188,8 @@ cython_debug/
 .history
 .ionide
 
-# Ignore all local history of files
-login/logindetails.dat
+# Ignore all local files
+*.dat
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,macos,python
 

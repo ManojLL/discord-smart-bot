@@ -1,5 +1,3 @@
-import json
-
 arr = ["keep going forward", "this is gonna be a hit", "LFG", "lets make this project a hit", "love this art works tho", "I love this project", "WAGMI", "let's grinddd", "GRINDDD",
 "let's grind ppl", "I want this sooo bad", "niceee", "dont stop ppl", "we can do this", "keep going", "yeah, it looks dope tho", "LVL20 here I come", "lessgooo", "keep grinding ppl!",
 "we can do this", "server is mad rn!", "you guys rock!", "we can hit the moon", "mooooon", "gooooooooo ppl we can do this", "server is live af", "love this server", "the hype is real",
@@ -9,16 +7,16 @@ arr = ["keep going forward", "this is gonna be a hit", "LFG", "lets make this pr
 "never seen something like this before", "unique stuff", "wdym?", "keep going!", "like i said before, no pain - no gain", "don't give up", "try hard mode - ON", "that's great man!", "legit stuff",
 "sweet!", "imma not gonna stop until LVL10", "keep going guys!", "moving forward"]
 
-def jsonGen():
-    try:
-        with open('random_phrase.json', 'w') as fp:
-            json.dump(arr, fp)
-
-        print(f'\nLength of Random Phases Arr - {len(arr)}')
-        print('******* JSON file created *******\n')   
+def messagesGen():
+    try:        
+        with open('messages.txt', mode='wt', encoding='utf-8') as myfile:
+            myfile.write('\n'.join(arr))
+            
+        print(f'\n******* Text File created with {len(arr)} messages *******\n')   
         
     except Exception as err:
         print(err)
         
 if __name__ == '__main__':
-  jsonGen()
+  messagesGen
+()
