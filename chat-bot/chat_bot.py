@@ -15,7 +15,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 from os import system, name as osname
 from alive_progress import alive_bar
-import utils.discord_login as discord_login
+import utils.login.discord_login as discord_login
 from bot_init import train_bot
 from pickle import load
 from time import sleep
@@ -25,7 +25,7 @@ import time
 
 def retrieve_credentials():
     try:
-        frobj = open(f"{os.path.abspath('credentials.dat')}", "rb")
+        frobj = open("../utils/login/credentials.dat", "rb")
         details = load(frobj)
         frobj.close()
         return details
@@ -41,7 +41,7 @@ def login(link, email, passwd):
     # Initialising/Installing Chromedriver
     global driver, flag, templink
     if (flag == False):
-        driver = webdriver.Chrome(ChromeDriverManager().install())
+        driver = webdriver.Chrome(ChromeDriverManager().install(), service_log_path = None)
     if (link != templink):
         print("\nLoading Discord...\n")
         driver.get(link)
@@ -67,40 +67,41 @@ def create_logs(logs):
     with open(f'logs/{timeStamp}.txt', 'w') as file:
         for log in logs:
             file.write(log)
+            file.write("\n")
 
 # Starting spam
 def chat(n, intervals, chatbot):
     logs = []
-    thread = driver.find_elements_by_class_name('messageContent-2qWWxC')
-    nextMsg = len(thread)
     
     system('cls' if osname == 'nt' else 'clear')
-    with alive_bar(n, title='Sending Messages', bar='classic2', spinner='classic') as bar:
+    with alive_bar(n, title='Chatting', bar='classic2', spinner='classic') as bar:
         for i in range(n):
             localtime = time.localtime()
             timeStamp = time.strftime('%Y-%m-%d %H:%M:%S', localtime)
-            
-            # randomWrd = random.choice(messages)
+    
             randomTime = random.choice(intervals)
-            actions.send_keys(chatbot.get_response("hi, how are you?", Keys.ENTER))
             
-            actions = ActionChains(driver)
             while True:
                 thread = driver.find_elements_by_class_name('messageContent-2qWWxC')
                 try:
-                    while not thread[nextMsg] == None:
+                    while not thread[-1] == None:
                         break
                     break
                 except Exception as e:
                     print(e)
                     pass
-            actions.send_keys(chatbot.get_response(thread[nextMsg].text))
+            response = chatbot.get_response(thread[-1].text)
+            
+            actions = ActionChains(driver)
+            actions.send_keys(response.text)
             actions.send_keys(Keys.ENTER)
             actions.perform()
+            bar()
+            sleep(randomTime)
             
-            logs.append(f'{str(i).zfill(3)} - {randomTime}s - {timeStamp} - {"randomWrd"}')
+            logs.append(f'{str(i).zfill(3)} - {randomTime}s - {timeStamp} - {response}')
     print("\nAll Messages Sent")
-    # create_logs(logs)
+    create_logs(logs)
 
 # Menu
 def main():

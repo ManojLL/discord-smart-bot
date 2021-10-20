@@ -5,10 +5,10 @@ import spacy
 # Load English tokenizer, tagger, parser, NER and word vectors
 spacy.load('en')
 
-def train_bot():
-    # Create a new chat bot named Discord-ChatBot
-    chatbot = ChatBot("Discord-ChatBot")
-    
+ # Create a new chat bot named Discord-ChatBot
+chatbot = ChatBot("Discord-ChatBot")
+
+def train_bot(): 
     print("\nTraning Discord-ChatBot\n")
 
     # Create a new trainer for the chatbo
@@ -26,8 +26,3 @@ def train_bot():
     print("\nTraining completed")
     
     return chatbot
-
-# message = ""
-# while message.lower() not in ("q", "quit", "exit"):
-#     message = input("You: ")
-#     print(f'bot : {chatbot.get_response(message)}')

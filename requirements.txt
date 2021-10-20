@@ -1,3 +1,6 @@
-alive-progress==2.1.0
 webdriver_manager==3.5.1
+ChatterBot==1.1.0
+chatterbot-corpus>=1.2.0
+alive_progress==2.1.0
+spacy==2.1.9
 selenium==4.0.0

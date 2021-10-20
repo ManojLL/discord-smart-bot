@@ -189,7 +189,9 @@ cython_debug/
 .ionide
 
 # Ignore all local files
+*.txt
 *.dat
+/logs/*
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,macos,python
 
