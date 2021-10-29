@@ -3,10 +3,10 @@ from chatterbot.trainers import ChatterBotCorpusTrainer
 import spacy
 
 # Load English tokenizer, tagger, parser, NER and word vectors
-spacy.load('en')
+spacy.load("en_core_web_sm")
 
  # Create a new chat bot named Discord-ChatBot
-chatbot = ChatBot("Discord-ChatBot")
+chatbot = ChatBot("Discord-ChatBot", storage_adapter="chatterbot.storage.SQLStorageAdapter")
 
 def train_bot(): 
     print("\nTraning Discord-ChatBot\n")

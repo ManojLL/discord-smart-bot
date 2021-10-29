@@ -20,7 +20,31 @@ from bot_init import train_bot
 from pickle import load
 from time import sleep
 import random
+import requests
 import time
+
+def create_gif_collection(search_terms, limits):
+    print("\Searching for GIFs...\n")
+    # collection of tenor gifs
+    gif = []
+
+    # set the apikey and limit
+    apikey = "HO0RLZ3VG2F4"
+    
+    for i in range(len(search_terms)):
+        # search for the term
+        r = requests.get("https://g.tenor.com/v1/search?q=%s&key=%s&limit=%s" % (i, apikey, limits))
+        if r.status_code == 200:
+            # get the json
+            json = r.json()
+            # get the url
+            url = json["results"][0]["media"][0]["gif"]["url"]
+            # append the url to the list
+            gif.append(url)   
+        else:
+            print("Error: " + str(r.status_code))
+            
+    return gif
 
 
 def retrieve_credentials():
@@ -34,7 +58,7 @@ def retrieve_credentials():
 
 def clearscreen():
     system('cls' if osname == 'nt' else 'clear')
-    print("\n", "-"*25, "DISCORD SPAM BOT", "-"*25, "\n")
+    print("\n", "-"*25, "DISCORD CHAT BOT", "-"*25, "\n")
 
 # Opening link and logging in
 def login(link, email, passwd):
@@ -69,17 +93,21 @@ def create_logs(logs):
             file.write(log)
             file.write("\n")
 
-# Starting spam
-def chat(n, intervals, chatbot):
+# Starting chat
+def chat(n, intervals, chatbot, gif_collection):
     logs = []
     
-    system('cls' if osname == 'nt' else 'clear')
+    print("\nBot Launching...\n")
     with alive_bar(n, title='Chatting', bar='classic2', spinner='classic') as bar:
         for i in range(n):
-            localtime = time.localtime()
-            timeStamp = time.strftime('%Y-%m-%d %H:%M:%S', localtime)
+            token = random.randint(1, 6)
+            print(f"token - {token}")
     
-            randomTime = random.choice(intervals)
+            localtime = time.localtime()
+            time_stamp = time.strftime('%Y-%m-%d %H:%M:%S', localtime)
+    
+            random_time = random.choice(intervals)
+            random_gif = random.choice(gif_collection)
             
             while True:
                 thread = driver.find_elements_by_class_name('messageContent-2qWWxC')
@@ -90,16 +118,21 @@ def chat(n, intervals, chatbot):
                 except Exception as e:
                     print(e)
                     pass
-            response = chatbot.get_response(thread[-1].text)
-            
+
             actions = ActionChains(driver)
+            
+            if (token == 1 or token == 5):
+                response = random_gif
+            else: 
+                response = chatbot.get_response(thread[-1].text)
+                
             actions.send_keys(response.text)
             actions.send_keys(Keys.ENTER)
             actions.perform()
             bar()
-            sleep(randomTime)
+            sleep(random_time)
             
-            logs.append(f'{str(i).zfill(3)} - {randomTime}s - {timeStamp} - {response}')
+            logs.append(f'{str(i).zfill(3)} - {random_time}s - {time_stamp} - {response}')
     print("\nAll Messages Sent")
     create_logs(logs)
 
@@ -108,6 +141,7 @@ def main():
     global flag
     flag = False
     intervals = []
+    gif_words = []
     time_interval = ""
 
     details = retrieve_credentials()
@@ -123,21 +157,30 @@ def main():
         while True:
             clearscreen()
             link = input("\nEnter link to channel: ")
-            num_of_msg = int(input("Enter number of messages: "))
 
+            num_of_msg = int(input("Enter number of messages: "))
             while True:
                 time_interval = input("Enter time interval between messages (in seconds): ")
                 if (time_interval == "q"):
                     break
                 intervals.append(int(time_interval))
-
+                
+            num_of_gifs = int(input("Enter number of gifs: "))
+            while True:
+                related_gif_words = input("Enter related gif words: ")
+                if (related_gif_words == "q"):
+                    break
+                gif_words.append(related_gif_words)
+            
             login(link, email, passwd)
-            chat(num_of_msg, intervals, chatbot)
+            gif_collection = create_gif_collection(gif_words, num_of_gifs)
+            chat(num_of_msg, intervals, chatbot, gif_collection)
+            
             choice = input("\nDo you want to send more messages (y/n): ")
             if (choice == "n" or choice == "q"):
                 break
     except Exception as e:
-        print("\nInvalid input, Enter 'q' to exit")
+        print(e)
 
 if __name__ == '__main__':
     driver = ''
